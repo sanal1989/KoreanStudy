@@ -1,0 +1,112 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Новости</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <nav class="navbar navbar-expand-md " >
+                    <div class="container-fluid">
+                        <button class="navbar-toggler"  data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <div class="nav nav-pills mb-3 mt-3 " id="pills-tab" role="tablist">
+                                    <div class="nav-item">
+                                        <button class="nav-link" id="pills-home-tab" type="button" data-bs-toggle="pill" th:onclick="|location.href='@{/}'|">Главная</button>
+                                    </div>
+                                    <div class="nav-item">
+                                        <button class="nav-link active" id="pills-news-tab" data-bs-toggle="pill" data-bs-target="#pills-news" type="button" role="tab" aria-controls="pills-news" aria-selected="true">Новость</button>
+                                    </div>
+                                    <div class="nav-item">
+                                        <button class="nav-link" id="pills-newses-tab" data-bs-toggle="pill" data-bs-target="#pills-newses" type="button" role="tab" aria-controls="pills-newses" aria-selected="false">Новости</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="col">
+                <div class="nav-item mt-4 d-flex justify-content-end" role="presentation">
+                    <div sec:authorize="!isAuthenticated()">
+                        <button class="btn btn-primary" id="pills-login-tab" th:onclick="|location.href='@{/login}'|">Войти</button>
+                    </div>
+                    <div sec:authorize="isAuthenticated()">
+                        <button class="btn btn-primary" id="pills-login-tab" th:onclick="|location.href='@{/logout}'|">Выйти</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-news" role="tabpanel" aria-labelledby="pills-news-tab" tabindex="0">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item text-center" th:text="${news.getTitle()}"></li>
+                        <li class="list-group-item" th:if="${image != null}"><div id="image-container" class="text-center" ><img th:src="@{'data:image/jpeg;base64,'+${image}}" width="50%" height="50%"></div></li>
+                        <li class="list-group-item"><p th:utext="${news.getDescription().replace('&#10;', '<br>')}"></p></li>
+                        <li class="list-group-item"><p th:utext="${news.getContent().replace('&#10;', '<br>')}"></p></li>
+                    </ul>
+                </div>
+                <div class="tab-pane fade" id="pills-newses" role="tabpanel" aria-labelledby="pills-newses-tab" tabindex="0">
+                    <div>
+                        <table id="news-table" class="table mt-3 text-center">
+                            <thead>
+                            <tr>
+                                <th>Урок</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="news : ${newses}">
+                                    <tr>
+                                        <td th:id = "'tr_title_news_' + ${news.getId()}">
+                                            <a th:href="@{/newses/{id}(id = ${news.getId()})}">
+                                                <button class="btn btn-primary" th:text="${news.getTitle()}"></button>
+                                            </a>
+                                            <p th:utext="${news.getDescription()}"></p></td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer class="text-center text-lg-start">
+    <div class="container d-flex justify-content-center py-5">
+        <div class=" mx-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-telegram" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32 2.179-1.471 3.304-2.214 3.374-2.23.05-.012.12-.026.166.016.047.041.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8.154 8.154 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.093.06.183.125.27.187.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.426 1.426 0 0 0-.013-.315.337.337 0 0 0-.114-.217.526.526 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09z"/>
+            </svg>
+        </div>
+        <div class="mx-2" >
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-youtube" viewBox="0 0 16 16">
+                <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="text-center text-white p-3" style="background-color: #0d6efd;">
+        © 2024 Copyright:
+        <a class="text-white" href="https://mdbootstrap.com/">SaM</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Демо Bootstrap</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+<form id="add-new-user-registration-form" th:action="@{/register/save}" method="post" th:object="${user}">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-6 col-lg-4 col-xl-4">
+                <div class="card-body p-5 text-center">
+                    <div class="mb-3">
+                        <h1>Регистрация пользователя</h1>
+                    </div>
+                    <div th:if="${param.success}">
+                        <div class="alert alert-info">
+                            Вы успешно зарегистрировались!
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name-user-input" class="form-label">имя</label>
+                        <input type="text" class="form-control" id="name-user-input" th:field="*{name}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mail-user-input" class="form-label">почта</label>
+                        <input type="email" class="form-control" id="mail-user-input" th:field="*{mail}" required>
+                        <p th:errors = "*{mail}" class="text-danger"
+                           th:if="${#fields.hasErrors('mail')}"></p>
+                    </div>
+                    <div class="d-grid gap-2 mt-3">
+                        <label for="mail-user-input" class="form-label">пароль</label>
+                        <input type="text" class="form-control" id="password-user-input" th:field="*{password}" required>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-3"  >
+                    <input type="submit" class="btn btn-primary btn-lg">
+                    <span>Если вы уже зарегистрировались <a th:href="@{/login}">Вход</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
